@@ -3,7 +3,10 @@ class Player:
         self.name = name
         self.health = 100  # Starting health
         self.shield = 0 # Shield - obtained for 1 turn by defending
-        self.action_points = 0  # Total action points per turn
+        self.action_points = 0 # Total action points per turn. Player gets +4 actions per turn
+        self.attack_points = 0 # Use action points to get att/def/skip points
+        self.defend_points = 0
+        self.skip_points = 0
 
     def attack(self, attack_points, target):
         attack_points = max(0, attack_points - target.shield) # Defender's shield reduces attack points

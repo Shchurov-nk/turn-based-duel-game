@@ -8,6 +8,7 @@ class Game:
 
     def start(self):
         while self.player1.health > 0 and self.player2.health > 0:
+            self.prepare_current_player_points()
             self.display_status()
             self.take_turn()
         self.display_winner()
@@ -17,29 +18,37 @@ class Game:
         print(f"{self.player1.name} Health: {self.player1.health}")
         print(f"{self.player2.name} Health: {self.player2.health}")
         print(f"{self.current_player.name}'s turn!")
+        print(f"{self.current_player.name} has {self.current_player.action_points} action points!")
+
+    def prepare_current_player_points(self):
+        # Reset points
+        self.current_player.attack_points = 0
+        self.current_player.defend_points = 0
+        self.current_player.skip_points = 0
+        # Reset shield
+        self.current_player.shield = 0
+        # Add action points
+        self.current_player.action_points += 4
 
     def take_turn(self):
-        attack_points, defend_points, skip_points = 0, 0, 0
-        self.current_player.action_points += 4
-        print(f"{self.current_player.name} has {self.current_player.action_points} action points!")
         while self.current_player.action_points > 0:
             action = input("Choose action (attack/defend/skip - a/d/s): ").strip().lower()
             if action == "a":
                 self.current_player.action_points -= 1
-                attack_points += 1
+                self.current_player.attack_points += 1
             elif action == "d":
                 self.current_player.action_points -= 1
-                defend_points += 1
+                self.current_player.defend_points += 1
             elif action == "s":
                 self.current_player.action_points -= 1
-                skip_points += 1
+                self.current_player.skip_points += 1
             else:
                 print("Invalid action. Please choose 'attack' or 'defend'.")
 
         target = self.player2 if self.current_player == self.player1 else self.player1
-        self.current_player.attack(attack_points, target)
-        self.current_player.defend(defend_points)
-        self.current_player.skip(skip_points)
+        self.current_player.attack(self.current_player.attack_points, target)
+        self.current_player.defend(self.current_player.defend_points)
+        self.current_player.skip(self.current_player.skip_points)
 
         # Switch turns
         self.current_player = self.player2 if self.current_player == self.player1 else self.player1
