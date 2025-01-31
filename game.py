@@ -40,10 +40,13 @@ class Game:
                 self.current_player.action_points -= 1
                 self.current_player.defend_points += 1
             elif action == "s":
-                self.current_player.action_points -= 1
-                self.current_player.skip_points += 1
+                if self.current_player.skip_points < 4:
+                    self.current_player.action_points -= 1
+                    self.current_player.skip_points += 1
+                else:
+                    print("Invalid action. Can't skip more than 4 points")
             else:
-                print("Invalid action. Please choose 'attack' or 'defend'.")
+                print("Invalid action. Please choose a/d/s.")
 
         target = self.player2 if self.current_player == self.player1 else self.player1
         self.current_player.attack(self.current_player.attack_points, target)
